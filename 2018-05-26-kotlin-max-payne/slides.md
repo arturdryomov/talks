@@ -1,4 +1,8 @@
-<!-- Tool: Marp 0.0.11 -->
+<!-- $theme: default -->
+
+<!-- Tool: Marp 0.0.12 -->
+
+<!-- $size: a4 -->
 
 # Kotlin: MAX PAYNE
 
@@ -22,21 +26,22 @@
 
 # Juno Rider :blue_car:
 
-* Full-Kotlin + RxJava from the start
-* 2 years
-* Kotlin `1.1-EAP` in production for 6+ months :fire:
-* Kotlin `1.2-EAP` right now :fire:
+* :three: years
+* Kotlin-only + RxJava from the start
+* Kotlin EAP in production :fire:
+  * `1.1-EAP` — 6 months
+  * `1.2-EAP` — 3 months
 * 99.9 % crash-free
 * 2 week sprints
-* :five: developers, :two: QA
+* :four: developers, :one: QA
 
 ---
 
 # Juno Rider :blue_car:
 
-* `cloc main/kotlin` — 40 K 
-* `cloc test/kotlin` — 38 K
-* `cloc androidTest/kotlin` — 12 K
+* `cloc main/kotlin` — 56 K 
+* `cloc test/kotlin` — 49 K
+* `cloc androidTest/kotlin` — 17 K
 
 ---
 
@@ -52,13 +57,13 @@
 
 # Specification mumbo-jumbo :triangular_ruler:
 
-* Java AST — Abstract Syntax Tree
-    * Only Java
-* PSI — Program Structure Interface
-    * Only IJ
-* UAST — Universal AST 
+* Java AST (Abstract Syntax Tree)
+    * Java-only
+* PSI (Program Structure Interface)
+    * IntelliJ IDEA-only
+* UAST (Universal AST)
     * Java and Kotlin
-    * Android Lint is migrating to it!
+    * Android Lint (since 3.1.0 — was in development for almost a year)
 
 ---
 
@@ -68,15 +73,25 @@
 
 > Checkstyle works only with AST as we depend on ANTLR and Java grammar.
 
+https://github.com/checkstyle/checkstyle/issues/4369
+
 ---
 
 # Checkstyle and Static Analysis :flashlight:
 
-## Put your IJ config into repository
+* Put your IntelliJ IDEA config into the repository
+* You can somewhat run IJ headless
+* Detekt + ktlint (work with PSI though)
+* Android Lint is not actually tied to Android
+* Force warnings as errors.
 
-###### You can somewhat run IJ headless
-
-###### Detekt works with PSI, so take it for a spin
+  ```kotlin
+  tasks.withType<KotlinCompile> {
+      kotlinOptions {
+          allWarningsAsErrors = true
+      }
+  }
+  ```
 
 ---
 
@@ -177,12 +192,6 @@ val game: String = with(StringBuilder()) {
 # ∞ paths
 
 * Better brew that coffee for long PRs :coffee:
-* `?:` vs. `let` vs. `if (it == null)`
-
----
-
-# ∞ paths :flashlight:
-
 * `CODE_STYLE.md`
 * It does not really matter, just go with it :airplane:
 
@@ -204,18 +213,17 @@ No joke, actually useful.
 val (first, second) = pair
 val (first, second, third) = triple
 
-Observable
-    .fromCallable { createPair() }
-    .subscribe { (first, second) ->
-        println("1st is $first, 2nd is $second")
-    }
+listOf(1 to "one", 2 to "two").map { (number, text) ->
+    
+    println("number is $number, text is $text")
+}
 ```
 
 ---
 
 # Destructuring
 
-Supports `data class` and suggested by IJ.
+Supports `data class` and suggested by IDE.
 
 ```kotlin
 data class Person(
@@ -243,9 +251,27 @@ val (firstName, lastName) = person
 
 ---
 
+# Destructuring
+
+Component functions!
+
+```kotlin
+data class Person(
+    lastName: String,
+    firstName: String
+) {
+    fun component1() = firstName
+    fun component2() = lastName
+}
+```
+
+AWKWARD! Also — so easy to forget...
+
+---
+
 # Destructuring :flashlight:
 
-## We just ban it unless `Pair` or `Triple`
+## Just ban it unless `Pair` or `Triple`
 
 
 ---
@@ -277,7 +303,15 @@ fun createObservable(): Observable<Int> {
 
 * Read docs and sources carefully.
 * Promote `@Nullability` to your favorite libraries.
-* Hopefully Android SDK will catch up after announcements.
+* Make your own abstraction on top of a Java API.
+
+---
+
+# `null` safety!! :flashlight:
+
+## Kotlin: The Problem with `null`
+
+### http://arturdryomov.online/posts/kotlin-the-problem-with-null/
 
 ---
 
@@ -309,92 +343,73 @@ Use `?:` and `let` — embrace the language.
 
 ---
 
-# SAM Conversion
-
-*Single Abstract Method*
+# Mockito
 
 ```kotlin
-// RxJava 1
-Observable.zip(a, b) { a, b -> a to b}
+interface View {
+    fun showMessage(message: String)
+}
 
-// RxJava 2
-Observable.zip(a, b, BiFunction<Int, Int> { a, b ->
-    a to b
-})
+class Presenter {
+    fun present(view: View) = view.showMessage("It works!")
+}
+
+@Test fun test() {
+    val view = Mockito.mock<View>()
+    presenter.present(view)
+    
+    verify(view).showMessage(Mockito.any()) // Crash!
+}
 ```
 
 ---
 
-# SAM Conversion
+# Mockito
 
 ```java
-// RxJava 1
-public static <T1, T2, R> Observable<R> zip
-(
-    Observable<T1> o1, Observable<T2> o2,
-    Func2<T1, T2, R> zipper
-)
-
-// RxJava 2
-public static <T1, T2, R> Observable<R> zip
-(
-    ObservableSource<T1> o1, ObservableSource<T2> o2,
-    BiFunction<T1, T2, R> zipper
-)
-```
-
----
-
-# SAM Conversion
-
-```java
-// RxJava 1
-public interface Func2<T1, T2, R> extends Function {
-    R call(T1 t1, T2 t2);
-}
-
-// RxJava 2
-public interface BiFunction<T1, T2, R> {
-    R apply(T1 t1, T2 t2);
+class Mockito {
+    
+    public static <T> T any() {
+        return null;
+    }
 }
 ```
 
 ---
 
-# SAM Conversion
+# Mockito
 
-```java
-// RxJava 1
-public class Observable<T> {
-    // Redacted
-}
+```kotlin
+fun <T> anything(): T = null as T
 
-
-// RxJava 2
-public interface ObservableSource<T> {
-    void subscribe(Observer<T> observer);
+@Test fun test() {
+    val view = Mockito.mock<View>()
+    presenter.present(view)
+    
+    verify(view).showMessage(anything()) // It works!
 }
 ```
 
----
-
-# SAM Conversion
-
-### :star: https://youtrack.jetbrains.com/issue/KT-14984
-
-### *Impossible to pass not all SAM argument as function*
+It works because of explicit nullable `T` declaration.
 
 ---
 
-# SAM Conversion :flashlight:
+# Mockito :flashlight:
 
-## We’ve made a bunch of extensions for now
+Aliases!
 
-### RxKotlin has some
+```kotlin
+fun <T> eq(value: T): T = Mockito.eq<T>(obj)
+fun <T> any(): T = Mockito.any<T>()
+
+fun <T> whenever(call: T) = Mockito.`when`(call)
+```
+
+Yep, `when` is a part of the language syntax actually.
 
 ---
 
-# Gson and Reflection
+# Gson
 
 ```kotlin
 data class Model {
@@ -409,7 +424,7 @@ model.field.toString() // Crash!
 
 ---
 
-# Gson and Reflection
+# Gson
 
 ## Gson is happy to write `null` to properties
 
@@ -417,7 +432,7 @@ model.field.toString() // Crash!
 
 ---
 
-# Gson and Reflection
+# Gson
 
 Fail fast :boom:
 
@@ -435,13 +450,17 @@ data class Model {
 }
 ```
 
+`Validatable` is executed in _parse time_.
+
 ---
 
-# Gson and Reflection :flashlight:
+# Gson :flashlight:
 
-## Take a look at Moshi or Jackson
+Take a look at Moshi or Jackson
 
-### Uses Kotlin native reflection :angel:
+* Uses Kotlin native reflection :angel:
+* Uses 5 MiB of application size.
+  * OH HAI Android :sparkles:
 
 ---
 
@@ -457,7 +476,7 @@ data class Model {
 
 * Neat, reduces methods count.
     * OH HAI Android :sparkles:
-* Feels like kernel development.
+* Syntax feels like kernel development.
 * Not emraced at all.
 * Mostly forces `@Suppress("nothing_to_inline")`.
 
@@ -631,6 +650,14 @@ $ ./gradlew clean assembleDebug --no-daemon
 
 ---
 
+# `rm -f kapt`
+
+## A Dagger to Remember
+
+### http://arturdryomov.online/posts/a-dagger-to-remember/
+
+---
+
 # Assemble :clock9: :flashlight:
 
 ## Do all optimizations you can
@@ -643,6 +670,83 @@ $ ./gradlew clean assembleDebug --no-daemon
 ---
 
 ![bg original](images/max-holstered.jpg)
+
+---
+
+# Gradle Kotlin DSL :game_die:
+
+---
+
+# Gradle Kotlin DSL: Kotlin versions
+
+* Gradle 4.2 bundles Kotlin 1.1.4-3 for DSL
+* Update project Kotlin 1.2-M1 → 1.2.0-beta-31...
+
+```plain
+Runtime files in the classpath should have the same version.
+These files were found in the classpath:
+
+.../dists/.../kotlin-stdlib-1.1.4-3.jar (version 1.1)
+.../caches/.../kotlin-stdlib-1.2.0-beta-31.jar (version 1.2)
+```
+
+---
+
+# Gradle Kotlin DSL: Kotlin versions
+
+## Sometimes versions are not compatible!
+
+### https://github.com/gradle/kotlin-dsl/issues/519
+
+---
+
+# Gradle Kotlin DSL: Groovy is in the air
+
+```groovy
+// Groovy
+testOptions {
+    unitTests.all {
+        maxParallelForks = 2
+    }
+}
+```
+```kotlin
+// Kotlin
+testOptions {
+    unitTests.all(KotlinClosure1<Test, Test>({
+        apply {
+            maxParallelForks = 2
+        }
+    }, this))
+}
+```
+
+---
+
+# Gradle Kotlin DSL: Groovy is in the air
+
+```java
+import groovy.lang.Closure;
+
+public class TestOptions {
+
+    public void unitTests(Closure closure) {
+        ConfigureUtil.configure(closure, unitTests);
+    }
+}
+```
+
+:star: https://issuetracker.google.com/issues/78547461
+
+---
+
+# Gradle Kotlin DSL: Groovy is in the air
+
+* Somebody, `N` years ago: _Non-Groovy Gradle DSL? WAT?_
+* Somebody, 2017: _Let’s introduce non-Groovy DSL!_
+  * `groovy.lang.Closure` → `org.gradle.api.Action`
+  * Java-based DSL-agnostic Gradle API
+* Plugin developers, 2017: _WAT?_
 
 ---
 
@@ -777,7 +881,7 @@ Before and after `system` are different.
 * Actually JUnit 5 from now on.
 * Use `@RunWith(JUnitPlatform::class)` to work with JUnit 4.
 * JUnit 5 is not released, so IJ may not work.
-    * *OH HAI Android Studio 3 Beta.*
+    * *OH HAI Android Studio 3*
 * `fon` and `fit` were removed, use Spek IJ plugin.
     * *Does not work with JUnit 4.*
 * :sparkles: This is fun :sparkles:
@@ -795,6 +899,15 @@ Before and after `system` are different.
 
 ---
 
+# Spek
+
+* Moved from JetBrains to Spek Framework.
+* Take a look at Spectrum!
+  * https://github.com/greghaskins/spectrum
+  * Works well with Kotlin and Java.
+
+---
+
 ![bg original](images/max-one-gun.jpg)
 
 ---
@@ -805,7 +918,7 @@ Before and after `system` are different.
 
 # Bonus round :video_game:
 
-## You are on your own
+## Less and less likely, but you are on your own
 
 ### Prepare that YouTrack account...
 
@@ -829,6 +942,10 @@ Before and after `system` are different.
 * Kotlin: JetBrains.
 * This is fine actually, but do not expect a miracle.
 * For a single company a damn great language :heart:
+
+---
+
+![bg original](images/the-fall.jpg)
 
 ---
 
