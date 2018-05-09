@@ -1,5 +1,3 @@
-<!-- $theme: default -->
-
 <!-- Tool: Marp 0.0.12 -->
 
 <!-- $size: a4 -->
@@ -51,11 +49,11 @@
 
 # Checkstyle and Static Analysis
 
-## So yeah, forget about it :sparkles:
+## So yeah, forget every tool for Java :sparkles:
 
 ---
 
-# Specification mumbo-jumbo :triangular_ruler:
+# Specifications :triangular_ruler:
 
 * Java AST (Abstract Syntax Tree)
     * Java-only
@@ -63,7 +61,7 @@
     * IntelliJ IDEA-only
 * UAST (Universal AST)
     * Java and Kotlin
-    * Android Lint (since 3.1.0 — was in development for almost a year)
+    * Android Lint (since 3.1.0 — took a year to get there)
 
 ---
 
@@ -79,10 +77,10 @@ https://github.com/checkstyle/checkstyle/issues/4369
 
 # Checkstyle and Static Analysis :flashlight:
 
-* Put your IntelliJ IDEA config into the repository
-* You can somewhat run IJ headless
-* Detekt + ktlint (work with PSI though)
-* Android Lint is not actually tied to Android
+* Put your IntelliJ IDEA config into the repository.
+* You can somewhat run IJ headless.
+* Detekt + ktlint (work with PSI though).
+* Android Lint is not actually tied to Android.
 * Force warnings as errors.
 
   ```kotlin
@@ -95,7 +93,7 @@ https://github.com/checkstyle/checkstyle/issues/4369
 
 ---
 
-# ∞ paths
+# Infinity War
 
 Let’s build something!
 
@@ -111,7 +109,7 @@ val game = gameBuilder.toString()
 
 ---
 
-# ∞ paths
+# Infinity War
 
 Also, `also`.
 
@@ -126,7 +124,7 @@ val game: String = StringBuilder().also {
 
 ---
 
-# ∞ paths
+# Infinity War
 
 Hmm, `let` it be?
 
@@ -142,7 +140,7 @@ val game: String = StringBuilder().let {
 
 ---
 
-# ∞ paths
+# Infinity War
 
 `apply` it!
 
@@ -157,7 +155,7 @@ val game: String = StringBuilder().apply {
 
 ---
 
-# ∞ paths
+# Infinity War
 
 `run` seems nice.
 
@@ -173,7 +171,7 @@ val game: String = StringBuilder().run {
 
 ---
 
-# ∞ paths
+# Infinity War
 
 How about `with`?
 
@@ -189,15 +187,10 @@ val game: String = with(StringBuilder()) {
 
 ---
 
-# ∞ paths
+# Infinity War :imp:
 
 * Better brew that coffee for long PRs :coffee:
 * `CODE_STYLE.md`
-* It does not really matter, just go with it :airplane:
-
----
-
-![bg original](images/max-jumping.jpg)
 
 ---
 
@@ -311,7 +304,7 @@ fun createObservable(): Observable<Int> {
 
 ## Kotlin: The Problem with `null`
 
-### http://arturdryomov.online/posts/kotlin-the-problem-with-null/
+### https://arturdryomov.online/posts/kotlin-the-problem-with-null/
 
 ---
 
@@ -335,9 +328,6 @@ val none = None
 
 val optional = nullableValue.toOptional()
 val nullable = o.toNullable()
-
-val valueStream = optionalStream.filterSome()
-val signalStream = optionalStream.filterNone()
 ```
 Use `?:` and `let` — embrace the language.
 
@@ -351,7 +341,7 @@ interface View {
 }
 
 class Presenter {
-    fun present(view: View) = view.showMessage("It works!")
+    fun present(view: View) = view.showMessage(randomMessage())
 }
 
 @Test fun test() {
@@ -464,10 +454,6 @@ Take a look at Moshi or Jackson
 
 ---
 
-![bg original](images/max-machine-gun.jpg)
-
----
-
 # Optimizations :rocket:
 
 ---
@@ -568,10 +554,6 @@ public static final class Companion {
 
 ---
 
-![bg original](images/max-two-guns-front.jpg)
-
----
-
 # Tooling :hammer:
 
 ---
@@ -612,10 +594,28 @@ Java keywords are suddenly banned.
 # Assemble :clock9:
 
 * Coming from Java? +:one: build step.
-* Use Dagger? +:one: build step.
-* `kapt` incremental compilation didn’t work for a long time...
-    * Have a change? `REBUILD`. 
+* Use annotation processing? +:one: build step.
 * Just remember you are doing it :100: times per day.
+
+---
+
+# `kapt`
+
+_Kotlin Annotation Processing Tool_
+
+* Breaks incremental compilation.
+* Throws errors.
+
+  ```
+  *_MemberInjector.java: error: package does not exist
+  ```
+---
+
+# `kapt`
+
+## `rm -f`
+
+### https://arturdryomov.online/posts/a-dagger-to-remember/
 
 ---
 
@@ -630,7 +630,6 @@ Java keywords are suddenly banned.
 # Mainframer :computer:
 
 ### https://github.com/gojuno/mainframer
-### https://github.com/elpassion/mainframer-intellij-plugin
 
 1. Laptop → *Source Code* → Build Machine.
 2. Build Machine → *Build Results* → Laptop.
@@ -650,26 +649,12 @@ $ ./gradlew clean assembleDebug --no-daemon
 
 ---
 
-# `rm -f kapt`
-
-## A Dagger to Remember
-
-### http://arturdryomov.online/posts/a-dagger-to-remember/
-
----
-
 # Assemble :clock9: :flashlight:
 
 ## Do all optimizations you can
     
-* Minimum SDK to Lollipop.
 * Gradle build cache.
-* Gradle Android Plugin DEX build cache.
 * Mainframer :computer:
-
----
-
-![bg original](images/max-holstered.jpg)
 
 ---
 
@@ -677,7 +662,7 @@ $ ./gradlew clean assembleDebug --no-daemon
 
 ---
 
-# Gradle Kotlin DSL: Kotlin versions
+# Kotlin versions
 
 * Gradle 4.2 bundles Kotlin 1.1.4-3 for DSL
 * Update project Kotlin 1.2-M1 → 1.2.0-beta-31...
@@ -692,7 +677,7 @@ These files were found in the classpath:
 
 ---
 
-# Gradle Kotlin DSL: Kotlin versions
+# Kotlin versions
 
 ## Sometimes versions are not compatible!
 
@@ -700,7 +685,7 @@ These files were found in the classpath:
 
 ---
 
-# Gradle Kotlin DSL: Groovy is in the air
+# Groovy is in the air
 
 ```groovy
 // Groovy
@@ -723,7 +708,7 @@ testOptions {
 
 ---
 
-# Gradle Kotlin DSL: Groovy is in the air
+# Groovy is in the air
 
 ```java
 import groovy.lang.Closure;
@@ -740,13 +725,28 @@ public class TestOptions {
 
 ---
 
-# Gradle Kotlin DSL: Groovy is in the air
+# Groovy is in the air
 
 * Somebody, `N` years ago: _Non-Groovy Gradle DSL? WAT?_
 * Somebody, 2017: _Let’s introduce non-Groovy DSL!_
   * `groovy.lang.Closure` → `org.gradle.api.Action`
   * Java-based DSL-agnostic Gradle API
 * Plugin developers, 2017: _WAT?_
+
+---
+
+# Groovy is in the air :flashlight:
+
+## Promote DSL-agnostic API
+
+---
+
+# Gradle Kotlin DSL
+
+* IDE does not recognize files sometimes.
+* Dynamic Groovy magic does not fit static Kotlin.
+* Feels like code, works kind of like code.
+* Hey, it’s alpha! :ghost:
 
 ---
 
@@ -777,7 +777,7 @@ class Spec : Spek({
 
 ---
 
-# Spek: versions
+# Versions
 
 * `1.0.89`
    * `DescribeBody` → `Dsl` :bomb:
@@ -789,7 +789,7 @@ class Spec : Spek({
 
 ---
 
-# Spek: versions :flashlight:
+# Versions :flashlight:
 
 ### :star: https://github.com/JetBrains/spek/issues/170
 
@@ -797,7 +797,7 @@ class Spec : Spek({
 
 ---
 
-# Spek: `memoized` caching
+# `memoized` caching
 
 ```kotlin
 @RunWith(JUnitPlatform::class)
@@ -818,7 +818,7 @@ Same `system` object for each run :gun:
 
 ---
 
-# Spek: `memoized` caching
+# `memoized` caching
 
 ```kotlin
 @RunWith(JUnitPlatform::class)
@@ -839,7 +839,7 @@ Unique `system` object for each run :balloon:
 
 ---
 
-# Spek: `memoized` caching :flashlight:
+# `memoized` caching :flashlight:
 
 ### :star: https://github.com/JetBrains/spek/issues/210
 
@@ -847,7 +847,7 @@ Unique `system` object for each run :balloon:
 
 ---
 
-# Spek: `memoized` before and after
+# `memoized` before and after
 
 ```kotlin
 @RunWith(JUnitPlatform::class)
@@ -868,7 +868,7 @@ Before and after `system` are different.
 
 ---
 
-# Spek: `memoized` before and after :flashlight:
+# `memoized` before and after :flashlight:
 
 ### :star: https://github.com/JetBrains/spek/issues/213
 
@@ -876,7 +876,7 @@ Before and after `system` are different.
 
 ---
 
-# Spek: JUnit
+# JUnit
 
 * Actually JUnit 5 from now on.
 * Use `@RunWith(JUnitPlatform::class)` to work with JUnit 4.
@@ -891,7 +891,7 @@ Before and after `system` are different.
 # Spek
 
 * Kind of advertized by JetBrains, but...
-* Commits are two times a month on average :sleeping:
+  * Moved to Spek Framework recently.
 * Breaks compatibility easily :bomb:
 * Docs feel outdated all the time.
 * There are bugs. Remember vanilla JUnit stability?
@@ -901,14 +901,11 @@ Before and after `system` are different.
 
 # Spek
 
-* Moved from JetBrains to Spek Framework.
-* Take a look at Spectrum!
-  * https://github.com/greghaskins/spectrum
-  * Works well with Kotlin and Java.
+## Take a look at Spectrum!
 
----
+https://github.com/greghaskins/spectrum
 
-![bg original](images/max-one-gun.jpg)
+Works well with Kotlin and Java.
 
 ---
 
@@ -951,11 +948,9 @@ Before and after `system` are different.
 
 # Conclusion
 
-* There will be dragons :dragon:
-* Kotlin will not make you a better developer.
-    * It will give you tools though :hammer:
 * Remember about Java underneath.
     * Swift can break things, Kotlin cannot :bird:
+* Tooling can be... cruel.
 * The language is top-notch and well-designed.
 * Be careful!
 
