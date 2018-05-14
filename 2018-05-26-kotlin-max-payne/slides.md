@@ -24,14 +24,14 @@
 
 # Juno Rider :blue_car:
 
-* :three: years
+* 3 years
 * Kotlin-only + RxJava from the start
 * Kotlin EAP in production :fire:
   * `1.1-EAP` — 6 months
   * `1.2-EAP` — 3 months
 * 99.9 % crash-free
 * 2 week sprints
-* :four: developers, :one: QA
+* 4 developers, 1 QA
 
 ---
 
@@ -61,7 +61,7 @@
     * IntelliJ IDEA-only
 * UAST (Universal AST)
     * Java and Kotlin
-    * Android Lint (since 3.1.0 — took a year to get there)
+    * Android Lint (since 3.1.0 — took almost a year)
 
 ---
 
@@ -203,8 +203,8 @@ val game: String = with(StringBuilder()) {
 No joke, actually useful.
 
 ```kotlin
-val (first, second) = pair
-val (first, second, third) = triple
+val (first, second) = Pair(1, 2)
+val (first, second, third) = Triple(1, 2, 3)
 
 listOf(1 to "one", 2 to "two").map { (number, text) ->
     
@@ -253,8 +253,8 @@ data class Person(
     lastName: String,
     firstName: String
 ) {
-    fun component1() = firstName
-    fun component2() = lastName
+    operator fun component1() = firstName
+    operator fun component2() = lastName
 }
 ```
 
@@ -346,7 +346,7 @@ class Presenter {
 
 @Test fun test() {
     val view = Mockito.mock<View>()
-    presenter.present(view)
+    Presenter().present(view)
     
     verify(view).showMessage(Mockito.any()) // Crash!
 }
@@ -374,7 +374,7 @@ fun <T> anything(): T = null as T
 
 @Test fun test() {
     val view = Mockito.mock<View>()
-    presenter.present(view)
+    Presenter().present(view)
     
     verify(view).showMessage(anything()) // It works!
 }
@@ -507,7 +507,7 @@ public static final class Companion {
 
 # `companion object` and `const`
 
-* So yeah, +:one: method without `const`.
+* So yeah, +1 method without `const`.
 * Methods will not count themselves!
 * Invocation costs are real :clock9:
 
@@ -593,8 +593,8 @@ Java keywords are suddenly banned.
 
 # Assemble :clock9:
 
-* Coming from Java? +:one: build step.
-* Use annotation processing? +:one: build step.
+* Coming from Java? +1 build step.
+* Use annotation processing? +1 build step.
 * Just remember you are doing it :100: times per day.
 
 ---
@@ -949,7 +949,6 @@ Works well with Kotlin and Java.
 # Conclusion
 
 * Remember about Java underneath.
-    * Swift can break things, Kotlin cannot :bird:
 * Tooling can be... cruel.
 * The language is top-notch and well-designed.
 * Be careful!
