@@ -18,14 +18,12 @@
 
 ## Kotlin :broken_heart: Juno
 
-### Well, only sometimes, so no grudge here
-
 ---
 
 # Juno Rider :blue_car:
 
 * 3 years
-* Kotlin-only + RxJava from the start
+* 100 % Kotlin
 * Kotlin EAP in production :fire:
   * `1.1-EAP` — 6 months
   * `1.2-EAP` — 3 months
@@ -47,27 +45,21 @@
 
 ---
 
-# Checkstyle and Static Analysis
+# Java Tools
 
-## So yeah, forget every tool for Java :sparkles:
+## Nope :sparkles:
 
 ---
 
 # Specifications :triangular_ruler:
 
 * Java AST (Abstract Syntax Tree)
-    * Java-only
 * PSI (Program Structure Interface)
-    * IntelliJ IDEA-only
 * UAST (Universal AST)
-    * Java and Kotlin
-    * Android Lint (since 3.1.0 — took almost a year)
 
 ---
 
 # Checkstyle
-
-> How about not mapping it to AST and instead map it to UAST (Universal Abstract Syntax Tree)? That way also adding support for Kotlin, which is an official thing for Android now, can be supported.
 
 > Checkstyle works only with AST as we depend on ANTLR and Java grammar.
 
@@ -75,13 +67,12 @@ https://github.com/checkstyle/checkstyle/issues/4369
 
 ---
 
-# Checkstyle and Static Analysis :flashlight:
+# Kotlin Tools :flashlight:
 
-* Put your IntelliJ IDEA config into the repository.
-* You can somewhat run IJ headless.
-* Detekt + ktlint (work with PSI though).
-* Android Lint is not actually tied to Android.
-* Force warnings as errors.
+* IntelliJ IDEA :heart:
+* `detekt` + `ktlint`
+* `android/lint` 
+* `kotlinc --force`
 
   ```kotlin
   tasks.withType<KotlinCompile> {
@@ -93,9 +84,8 @@ https://github.com/checkstyle/checkstyle/issues/4369
 
 ---
 
-# Infinity War
+# Infinity War :imp:
 
-Let’s build something!
 
 ```kotlin
 val gameBuilder = StringBuilder()
@@ -109,12 +99,11 @@ val game = gameBuilder.toString()
 
 ---
 
-# Infinity War
+# Infinity War :imp:
 
-Also, `also`.
 
 ```kotlin
-val game: String = StringBuilder().also {
+val game = StringBuilder().also {
     it.append("tic")
     it.append("tac")
     it.append("toe")
@@ -124,12 +113,10 @@ val game: String = StringBuilder().also {
 
 ---
 
-# Infinity War
-
-Hmm, `let` it be?
+# Infinity War :imp:
 
 ```kotlin
-val game: String = StringBuilder().let {
+val game = StringBuilder().let {
     it.append("tic")
     it.append("tac")
     it.append("toe")
@@ -140,12 +127,10 @@ val game: String = StringBuilder().let {
 
 ---
 
-# Infinity War
-
-`apply` it!
+# Infinity War :imp:
 
 ```kotlin
-val game: String = StringBuilder().apply {
+val game = StringBuilder().apply {
     append("tic")
     append("tac")
     append("toe")
@@ -155,28 +140,10 @@ val game: String = StringBuilder().apply {
 
 ---
 
-# Infinity War
-
-`run` seems nice.
+# Infinity War :imp:
 
 ```kotlin
-val game: String = StringBuilder().run {
-    append("tic")
-    append("tac")
-    append("toe")
-
-    toString()
-}
-```
-
----
-
-# Infinity War
-
-How about `with`?
-
-```kotlin
-val game: String = with(StringBuilder()) {
+val game = StringBuilder().run {
     append("tic")
     append("tac")
     append("toe")
@@ -189,7 +156,21 @@ val game: String = with(StringBuilder()) {
 
 # Infinity War :imp:
 
-* Better brew that coffee for long PRs :coffee:
+```kotlin
+val game = with(StringBuilder()) {
+    append("tic")
+    append("tac")
+    append("toe")
+
+    toString()
+}
+```
+
+---
+
+# Infinity War :imp:
+
+* :coffee:?
 * `CODE_STYLE.md`
 
 ---
@@ -200,7 +181,6 @@ val game: String = with(StringBuilder()) {
 
 # Destructuring
 
-No joke, actually useful.
 
 ```kotlin
 val (first, second) = Pair(1, 2)
@@ -216,105 +196,92 @@ listOf(1 to "one", 2 to "two").map { (number, text) ->
 
 # Destructuring
 
-Supports `data class` and suggested by IDE.
-
 ```kotlin
-data class Person(
-    firstName: String,
-    lastName: String
-)
+data class Person(val firstName: String, val lastName: String)
 
 val (firstName, lastName) = person
+```
+:sparkles:
+```kotlin
+data class Person(val lastName: String, val firstName: String)
+
+val (firstName, lastName) = person // It works!
 ```
 
 ---
 
 # Destructuring
 
-Somebody swaps fields :gun: Compiler is happy! :sparkles:
-
 ```kotlin
-data class Person(
-    lastName: String,
-    firstName: String
-)
-
-val (firstName, lastName) = person
-```
-
----
-
-# Destructuring
-
-Component functions!
-
-```kotlin
-data class Person(
-    lastName: String,
-    firstName: String
-) {
+data class Person(val firstName: String, val lastName: String)
+{
     operator fun component1() = firstName
     operator fun component2() = lastName
 }
 ```
 
-AWKWARD! Also — so easy to forget...
-
 ---
 
 # Destructuring :flashlight:
 
-## Just ban it unless `Pair` or `Triple`
+## `Pair`, `Triple` — Yep!
+## `data class` — Nope!
 
 
 ---
 
 # `null` safety?
 
-This works just fine!
-
 ```kotlin
-fun createObservable(): Observable<Int> {
-    return Observable.just(null)
-}
+Observable.just(null)
 ```
-:sparkles: OH HAI RxJava 2 :sparkles:
 
-*Reproduced on RxJava 2.1.1.*
+:sparkles:
+
+```java
+public static <T> Observable<T> just(T item) {
+    ObjectHelper.requireNonNull(item, "The item is null");
+    ...
+```
 
 ---
 
 # `null` safety!!
 
-* The language relies on `@NonNull` annotations.
-* Your code is full of unicorns :unicorn:
-* Java code is full of `null`.
+## `@Nullable` + `@NonNull`
 
 ---
 
 # `null` safety!! :flashlight:
 
-* Read docs and sources carefully.
-* Promote `@Nullability` to your favorite libraries.
-* Make your own abstraction on top of a Java API.
-
----
-
-# `null` safety!! :flashlight:
-
-## Kotlin: The Problem with `null`
-
-### https://arturdryomov.online/posts/kotlin-the-problem-with-null/
+* Docs.
+* Annotations.
+* Abstractions.
 
 ---
 
 # RxJava 2
 
-* Streams panic on `null` values.
-* Kotlin has to be friends with Java.
-* Side road — Swift vs. Kotlin :bird:
-    * Swift: `?` and `nil` just sugar for `enum Optional`.
-    * Kotlin: `?` is a language helper, no guarantees though.
+```kotlin
+val o: Observable<Int?> = Observable.just(null)
+
+// Runtime: NullPointerException
+```
+
+:sparkles:
+
+```java
+public static <T> Observable<T> just(T item) {
+    ObjectHelper.requireNonNull(item, "The item is null");
+    ...
+```
+
+---
+
+# `Optional<T>`
+
+* Swift: `?`, `nil` :arrow_right: `enum Optional`
+* Kotlin: `null` :arrow_right: `null`
 
 ---
 
@@ -329,27 +296,29 @@ val none = None
 val optional = nullableValue.toOptional()
 val nullable = o.toNullable()
 ```
-Use `?:` and `let` — embrace the language.
 
 ---
 
 # Mockito
 
 ```kotlin
-interface View {
-    fun showMessage(message: String)
+interface Api {
+    fun call(id: String)
 }
 
-class Presenter {
-    fun present(view: View) = view.showMessage(randomMessage())
+class Service {
+    fun call(api: Api) = api.call(createId())
 }
-
+```
+```kotlin
 @Test fun test() {
-    val view = Mockito.mock<View>()
-    Presenter().present(view)
+    val api = Mockito.mock<Api>()
+    Service().call(api)
     
-    verify(view).showMessage(Mockito.any()) // Crash!
+    verify(api).call(Mockito.any())
 }
+
+// Runtime: NullPointerException
 ```
 
 ---
@@ -370,32 +339,28 @@ class Mockito {
 # Mockito
 
 ```kotlin
-fun <T> anything(): T = null as T
-
-@Test fun test() {
-    val view = Mockito.mock<View>()
-    Presenter().present(view)
-    
-    verify(view).showMessage(anything()) // It works!
-}
+fun <T> anything(): T = Mockito.any<T>()
 ```
 
-It works because of explicit nullable `T` declaration.
+```kotlin
+@Test fun test() {
+    val api = Mockito.mock<Api>()
+    Service().call(api)
+    
+    verify(api).call(anything())
+}
+```
 
 ---
 
 # Mockito :flashlight:
 
-Aliases!
-
 ```kotlin
 fun <T> eq(value: T): T = Mockito.eq<T>(obj)
-fun <T> any(): T = Mockito.any<T>()
+fun <T> anything(): T = Mockito.any<T>()
 
 fun <T> whenever(call: T) = Mockito.`when`(call)
 ```
-
-Yep, `when` is a part of the language syntax actually.
 
 ---
 
@@ -409,22 +374,24 @@ data class Model {
 
 }
 
-model.field.toString() // Crash!
+val model = Gson().fromJson("", Model::javaClass)
+
+// Runtime: OK
+
+println(model.field.toString())
+
+// Runtime: NullPointerException
 ```
 
 ---
 
 # Gson
 
-## Gson is happy to write `null` to properties
-
-### Reflection is a thing in the Java world...
+## Java Reflection
 
 ---
 
 # Gson
-
-Fail fast :boom:
 
 ```kotlin
 data class Model {
@@ -440,17 +407,21 @@ data class Model {
 }
 ```
 
-`Validatable` is executed in _parse time_.
-
 ---
 
 # Gson :flashlight:
 
-Take a look at Moshi or Jackson
+## Moshi vs. Jackson
 
-* Uses Kotlin native reflection :angel:
-* Uses 5 MiB of application size.
-  * OH HAI Android :sparkles:
+### Kotlin Reflection :angel: (2.5 MiB)
+
+---
+
+# `null` safety!! :book:
+
+## Kotlin: The Problem with `null`
+
+### https://arturdryomov.online/posts/kotlin-the-problem-with-null/
 
 ---
 
@@ -458,17 +429,20 @@ Take a look at Moshi or Jackson
 
 ---
 
-# `inline` or `noinline`
+# `inline`
 
-* Neat, reduces methods count.
-    * OH HAI Android :sparkles:
-* Syntax feels like kernel development.
-* Not emraced at all.
-* Mostly forces `@Suppress("nothing_to_inline")`.
+```kotlin
+private fun createId(): Int = 42
+```
+vs.
+```kotlin
+@Suppress("nothing_to_inline")
+private inline fun createId(): Int = 42
+```
 
 ---
 
-# `inline` or `noinline`
+# `inline`
 
 ### :star: https://youtrack.jetbrains.com/issue/KT-16769
 
@@ -476,24 +450,17 @@ Take a look at Moshi or Jackson
 
 ---
 
-# `inline` or `noinline` :flashlight:
-
-## Know about it
-
-### I’m looking at you, `private fun`
-
----
-
-# `companion object` and `const`
+# `const`
 
 ```kotlin
-// Kotlin
 companion object {
     private val NUMBER = 42
 }
 ```
+
+:arrow_down:
+
 ```java
-// Java
 public static final class Companion {
     private final int NUMBER = 42;
     
@@ -505,52 +472,32 @@ public static final class Companion {
 
 ---
 
-# `companion object` and `const`
-
-* So yeah, +1 method without `const`.
-* Methods will not count themselves!
-* Invocation costs are real :clock9:
-
----
-
-# `companion object` and `const`
+# `const`
 
 ```kotlin
-// Kotlin
 companion object {
     private const val NUMBER = 42
 }
 ```
+:arrow_down:
+
 ```java
-// Java
 public static final class Companion {
     private static final int NUMBER = 42;
-    
-    // Will actually inline the value.
 }
 ```
 
 ---
 
-# `companion object` and `const`
+# `const`
 
-* Not advocated enough.
-* Only primitives and `String`.
-* Shouldn’t compiler do it itself?
-
----
-
-# `companion object` and `const` :flashlight:
-
-## Know about it
+* Primitives + `String`
+* `kotlinc`?
 
 ---
 
-# Hidden Costs :flashlight:
 
-## IJ → Tools → Show Kotlin Bytecode
-
-### Lots of fun, also — scary! :scream: 
+## Tools :arrow_right: Kotlin :arrow_right: Show Kotlin Bytecode
 
 ---
 
@@ -564,16 +511,12 @@ public static final class Companion {
 fun multiply(double: Double) = double * double
 ```
 
-Update Kotlin 1.1.2 :arrow_right: 1.1.3.
+:arrow_down: 1.1.3
 
 ```text
-java.lang.IllegalStateException
 org.jetbrains.kotlin.kapt3.diagnostic.KaptError
 Error while annotation processing
 ```
-Java keywords are suddenly banned.
-
-*Changelog? What changelog?*
 
 ---
 
@@ -587,15 +530,16 @@ Java keywords are suddenly banned.
 
 # Bugs :bug:
 
-## Bugs in the language tooling are a thing
+## Are a thing!
 
 ---
 
 # Assemble :clock9:
 
-* Coming from Java? +1 build step.
-* Use annotation processing? +1 build step.
-* Just remember you are doing it :100: times per day.
+* `javac`
+* :heavy_plus_sign: `kotlinc`
+* :heavy_plus_sign: `kapt`
+* :heavy_multiplication_x: :100: times per day.
 
 ---
 
@@ -611,9 +555,9 @@ _Kotlin Annotation Processing Tool_
   ```
 ---
 
-# `kapt`
+# `kapt` :book:
 
-## `rm -f`
+## A Dagger to Remember
 
 ### https://arturdryomov.online/posts/a-dagger-to-remember/
 
@@ -621,40 +565,41 @@ _Kotlin Annotation Processing Tool_
 
 # Assemble :clock9:
 
-* Compilation is CPU intensive.
-* Laptops have mobile CPUs.
-* PCs are cheap, easy to upgrade...
+* :computer: — `i5-5257U @ 2.70GHz`
+* :tv: — `i7-6700K @ 4.00GHz`
 
 ---
 
-# Mainframer :computer:
+# Mainframer
 
-### https://github.com/gojuno/mainframer
-
-1. Laptop → *Source Code* → Build Machine.
-2. Build Machine → *Build Results* → Laptop.
-
----
-
-# Mainframer :computer:
+## https://github.com/gojuno/mainframer
 
 ```plain
-$ ./gradlew clean assembleDebug --no-daemon
+$ rsync laptop mainframe
+$ make
+$ rsync mainframe laptop
 ```
 
-* Without MF: 4 minutes 10 seconds.
-    * Laptop overheat :fire:
-    * Basically cannot use your computer :broken_heart:
-* With MF: 1 minute 10 seconds.
+---
+
+# Mainframer
+
+```plain
+$ ./gradlew clean assembleDebug --no-daemon --no-build-cache
+```
+
+* :thumbsdown: 4 minutes 10 seconds.
+    * Overheat :fire:
+    * Slack :broken_heart:
+* :thumbsup: 1 minute 10 seconds.
 
 ---
 
 # Assemble :clock9: :flashlight:
-
-## Do all optimizations you can
     
+* Remove everything possible.
 * Gradle build cache.
-* Mainframer :computer:
+* Mainframer.
 
 ---
 
@@ -664,8 +609,8 @@ $ ./gradlew clean assembleDebug --no-daemon
 
 # Kotlin versions
 
-* Gradle 4.2 bundles Kotlin 1.1.4-3 for DSL
-* Update project Kotlin 1.2-M1 → 1.2.0-beta-31...
+* Gradle 4.2 — 1.1.4-3
+* Project — 1.2.0-beta-31
 
 ```plain
 Runtime files in the classpath should have the same version.
@@ -679,63 +624,52 @@ These files were found in the classpath:
 
 # Kotlin versions
 
-## Sometimes versions are not compatible!
+## Surprise!
 
 ### https://github.com/gradle/kotlin-dsl/issues/519
 
 ---
 
-# Groovy is in the air
+# Groovy
 
 ```groovy
-// Groovy
-testOptions {
-    unitTests.all {
-        maxParallelForks = 2
-    }
+unitTests.all {
+    maxParallelForks = 2
 }
 ```
+
+:arrow_down:
+
 ```kotlin
-// Kotlin
-testOptions {
-    unitTests.all(KotlinClosure1<Test, Test>({
-        apply {
-            maxParallelForks = 2
-        }
-    }, this))
-}
+unitTests.all(KotlinClosure1<Test, Test>({
+    apply {
+        maxParallelForks = 2
+    }
+}, this))
 ```
 
 ---
 
-# Groovy is in the air
+# Groovy
 
 ```java
 import groovy.lang.Closure;
 
-public class TestOptions {
-
-    public void unitTests(Closure closure) {
-        ConfigureUtil.configure(closure, unitTests);
-    }
-}
+public void unitTests(Closure closure)
 ```
 
 :star: https://issuetracker.google.com/issues/78547461
 
 ---
 
-# Groovy is in the air
+# Groovy
 
-* Somebody, `N` years ago: _Non-Groovy Gradle DSL? WAT?_
-* Somebody, 2017: _Let’s introduce non-Groovy DSL!_
-  * `groovy.lang.Closure` → `org.gradle.api.Action`
-  * Java-based DSL-agnostic Gradle API
-* Plugin developers, 2017: _WAT?_
+* 2012: `groovy.lang.Closure`
+* 2017: `org.gradle.api.Action`
 
 ---
 
-# Groovy is in the air :flashlight:
+# Groovy
 
 ## Promote DSL-agnostic API
 
@@ -743,10 +677,10 @@ public class TestOptions {
 
 # Gradle Kotlin DSL
 
-* IDE does not recognize files sometimes.
-* Dynamic Groovy magic does not fit static Kotlin.
-* Feels like code, works kind of like code.
-* Hey, it’s alpha! :ghost:
+* IDE :fire:
+* Dynamic Groovy :fire:
+* Workflow :fire:
+* Alpha! :ghost:
 
 ---
 
@@ -754,11 +688,37 @@ public class TestOptions {
 
 ---
 
+# JUnit
+
+```kotlin
+class SystemTest {
+
+    lateinit var system: System
+    
+    @BeforeEach fun create() {
+        system = System()
+    }
+    
+    @BeforeEach fun start() {
+        system.boot()
+    }
+    
+    @Test fun `has boot status`() {
+        assertThat(system.status()).isEqualTo(BOOTED)
+    }
+    
+    @Test fun `has positive uptime`() {
+    	assertThat(system.uptime()).isNotZero()
+    }
+}
+```
+
+---
+
 # Spek
 
 ```kotlin
-@RunWith(JUnitPlatform::class)
-class Spec : Spek({
+class SystemSpec : Spek({
 
     val system by memoized { System() }
     
@@ -768,8 +728,12 @@ class Spec : Spek({
             system.boot()
         }
 
-        it("reports boot status") {
+        it("has boot status") {
             assertThat(system.status()).isEqualTo(BOOTED)
+        }
+        
+        it("has positive uptime") {
+            assertThat(system.uptime()).isNotZero()
         }
     }  
 })
@@ -779,92 +743,31 @@ class Spec : Spek({
 
 # Versions
 
-* `1.0.89`
-   * `DescribeBody` → `Dsl` :bomb:
-* `1.1.0-beta3`
-   * `Dsl` → `SpecBody` :bomb:
-* Docs mention `1.0`, `1.1.19`.
-   * Do not exist.
-* Moved from JUnit 4 to JUnit 5 at some point :bomb:
-
----
-
-# Versions :flashlight:
-
-### :star: https://github.com/JetBrains/spek/issues/170
-
-### *Please fix Spek versioning, compatibility and publishing*
-
----
-
-# `memoized` caching
-
-```kotlin
-@RunWith(JUnitPlatform::class)
-class OopsSpec : Spek({
-
-    val system by memoized { System() }
-    
-    listOf(1, 2, 3).forEach { index ->
-
-        context("boot") {
-        
-            it("boots") {}
-        }
-    }
-}
-```
-Same `system` object for each run :gun:
-
----
-
-# `memoized` caching
-
-```kotlin
-@RunWith(JUnitPlatform::class)
-class OkSpec : Spek({
-
-    val system by memoized { System() }
-    
-    listOf(1, 2, 3).forEach { index ->
-
-        context("boot $index") {
-        
-            it("boots") {}
-        }
-    }
-}
-```
-Unique `system` object for each run :balloon:
-
----
-
-# `memoized` caching :flashlight:
-
-### :star: https://github.com/JetBrains/spek/issues/210
-
-### *Memoized and same test names*
+* `1.0.89`: `DescribeBody` :arrow_right: `Dsl` :bomb:
+* `1.1.0-beta3`: `Dsl` :arrow_right: `SpecBody` :bomb:
+* `1.0`, `1.1.19`: do not exist.
+* JUnit 4 :arrow_right: 5 :bomb:
 
 ---
 
 # `memoized` before and after
 
 ```kotlin
-@RunWith(JUnitPlatform::class)
 class JustSpec : Spek({
 
     val system by memoized { System() }
 
     beforeEachTest {
-        println("before $system")
+        println("before $system") // system_before
     }
 
     afterEachTest {
-        println("after $system")
+        println("after $system") // system_after
     }
 })
+
+// system_before != system_after
 ```
-Before and after `system` are different.
 
 ---
 
@@ -878,67 +781,56 @@ Before and after `system` are different.
 
 # JUnit
 
-* Actually JUnit 5 from now on.
-* Use `@RunWith(JUnitPlatform::class)` to work with JUnit 4.
-* JUnit 5 is not released, so IJ may not work.
-    * *OH HAI Android Studio 3*
-* `fon` and `fit` were removed, use Spek IJ plugin.
-    * *Does not work with JUnit 4.*
-* :sparkles: This is fun :sparkles:
+* JUnit 5!
+  * Android Studio :broken_heart:
+* JUnit 4?
+  * `@RunWith(JUnitPlatform::class)`
+* `fon`, `fit` :arrow_right: Spek IJ plugin.
+    * JUnit 4 :broken_heart:
+* :sparkles: Fun :sparkles:
 
 ---
 
 # Spek
 
-* Kind of advertized by JetBrains, but...
-  * Moved to Spek Framework recently.
-* Breaks compatibility easily :bomb:
-* Docs feel outdated all the time.
-* There are bugs. Remember vanilla JUnit stability?
-* Also, have 100 K tests? Have to maintain it :rage:
+* `jetbrains/spek` :arrow_right: `spekframework/spek`
+* Compatibility :bomb:
+* Docs :bomb:
+* Bugs :bomb:
+* 100 K tests :rage:
+* `2.0` :angel:
 
 ---
 
 # Spek
 
-## Take a look at Spectrum!
-
-https://github.com/greghaskins/spectrum
-
-Works well with Kotlin and Java.
+## Spectrum, KotlinTest
 
 ---
 
-# Bonus round :video_game:
+# Conclusion :8ball:
 
 ---
 
-# Bonus round :video_game:
 
-## Less and less likely, but you are on your own
-
-### Prepare that YouTrack account...
+# https://youtrack.jetbrains.com/issues/KT
 
 ---
-
-# Bonus round :video_game:
 
 > ...
 > Kotlin is very reference semantics, itʼs a thin layer on top of Java, and so it perpetuates through a lot of the Javaisms in its model.
 > ...
-> If we had done an analog to that for Objective-C it would be like, everything is an NSObject and itʼs objc_msgSend everywhere, just with parentheses instead of square brackets.
-> ...
 
-*Chris Lattner, Swift* :bird:
+*Chris Lattner (Swift, LLVM, Clang)* :bird:
 
 ---
 
-# Bonus round :video_game:
-
-* Java: Oracle, Red Hat, Intel, IBM, Eclipse, Twitter, JetBrains, etc.
-* Kotlin: JetBrains.
-* This is fine actually, but do not expect a miracle.
-* For a single company a damn great language :heart:
+* Java — Executive Committee (Java Community Process)
+  * Oracle, Red Hat, Intel, IBM, Eclipse, Twitter, JetBrains...
+  * 24 members
+* Kotlin — Language Committee
+  * JetBrains, Google
+  * 3 members
 
 ---
 
@@ -946,12 +838,11 @@ Works well with Kotlin and Java.
 
 ---
 
-# Conclusion
+# Conclusion :8ball:
 
-* Remember about Java underneath.
-* Tooling can be... cruel.
-* The language is top-notch and well-designed.
-* Be careful!
+* JVM :ghost:
+* Tooling :ghost:
+* Language :heart:
 
 ---
 
