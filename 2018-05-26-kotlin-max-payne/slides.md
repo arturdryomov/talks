@@ -168,7 +168,7 @@ val game = with(StringBuilder()) {
 
 ---
 
-# Infinity War :imp:
+# Infinity War :flashlight:
 
 * :coffee:?
 * `CODE_STYLE.md`
@@ -199,13 +199,13 @@ listOf(1 to "one", 2 to "two").map { (number, text) ->
 ```kotlin
 data class Person(val firstName: String, val lastName: String)
 
-val (firstName, lastName) = person
+val (firstName, lastName) = Person("f", "l")
 ```
 :sparkles:
 ```kotlin
 data class Person(val lastName: String, val firstName: String)
 
-val (firstName, lastName) = person // It works!
+val (firstName, lastName) = Person("f", "l") // It works!
 ```
 
 ---
@@ -224,8 +224,8 @@ data class Person(val firstName: String, val lastName: String)
 
 # Destructuring :flashlight:
 
-## `Pair`, `Triple` — Yep!
-## `data class` — Nope!
+## :heart: `Pair`, `Triple`
+## :broken_heart: `data class`
 
 
 ---
@@ -281,7 +281,7 @@ public static <T> Observable<T> just(T item) {
 # `Optional<T>`
 
 * Swift: `?`, `nil` :arrow_right: `enum Optional`
-* Kotlin: `null` :arrow_right: `null`
+* Kotlin: `?`, `null` :arrow_right: `null`
 
 ---
 
@@ -306,14 +306,14 @@ interface Api {
     fun call(id: String)
 }
 
-class Service {
-    fun call(api: Api) = api.call(createId())
+class Service(private val api: Api) {
+    fun call() = api.call(generateId())
 }
 ```
 ```kotlin
 @Test fun test() {
     val api = Mockito.mock<Api>()
-    Service().call(api)
+    Service(api).call()
     
     verify(api).call(Mockito.any())
 }
@@ -345,7 +345,7 @@ fun <T> anything(): T = Mockito.any<T>()
 ```kotlin
 @Test fun test() {
     val api = Mockito.mock<Api>()
-    Service().call(api)
+    Service(api).call()
     
     verify(api).call(anything())
 }
@@ -374,11 +374,11 @@ data class Model {
 
 }
 
-val model = Gson().fromJson("", Model::javaClass)
+val model = Gson().fromJson("{}", Model::javaClass)
 
 // Runtime: OK
 
-println(model.field.toString())
+model.field.toString()
 
 // Runtime: NullPointerException
 ```
@@ -539,7 +539,7 @@ Error while annotation processing
 * `javac`
 * :heavy_plus_sign: `kotlinc`
 * :heavy_plus_sign: `kapt`
-* :heavy_multiplication_x: :100: times per day.
+* :heavy_multiplication_x: :100:
 
 ---
 
@@ -585,13 +585,16 @@ $ rsync mainframe laptop
 # Mainframer
 
 ```plain
-$ ./gradlew clean assembleDebug --no-daemon --no-build-cache
+$ ./gradlew assembleDebug
 ```
 
-* :thumbsdown: 4 minutes 10 seconds.
-    * Overheat :fire:
-    * Slack :broken_heart:
-* :thumbsup: 1 minute 10 seconds.
+:thumbsdown: 4 minutes 10 seconds :fire:
+
+```plain
+$ mainframer ./gradlew assembleDebug
+```
+
+:thumbsup: 1 minute 10 seconds
 
 ---
 
@@ -622,9 +625,7 @@ These files were found in the classpath:
 
 ---
 
-# Kotlin versions
-
-## Surprise!
+# Kotlin versions :flashlight:
 
 ### https://github.com/gradle/kotlin-dsl/issues/519
 
@@ -669,7 +670,7 @@ public void unitTests(Closure closure)
 
 ---
 
-# Groovy
+# Groovy :flashlight:
 
 ## Promote DSL-agnostic API
 
@@ -802,7 +803,7 @@ class JustSpec : Spek({
 
 ---
 
-# Spek
+# Spek :flashlight:
 
 ## Spectrum, KotlinTest
 
@@ -818,14 +819,16 @@ class JustSpec : Spek({
 ---
 
 > ...
-> Kotlin is very reference semantics, itʼs a thin layer on top of Java, and so it perpetuates through a lot of the Javaisms in its model.
+> Kotlin is a thin layer on top of Java, and so it perpetuates through a lot of the Javaisms in its model.
 > ...
 
 *Chris Lattner (Swift, LLVM, Clang)* :bird:
 
 ---
 
-* Java — Executive Committee (Java Community Process)
+# :tophat:
+
+* Java — Executive Committee
   * Oracle, Red Hat, Intel, IBM, Eclipse, Twitter, JetBrains...
   * 24 members
 * Kotlin — Language Committee
